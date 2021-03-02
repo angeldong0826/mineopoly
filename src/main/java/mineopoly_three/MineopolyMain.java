@@ -69,15 +69,17 @@ public class MineopolyMain {
     private static double getStrategyWinPercent(MinePlayerStrategy yourStrategy, int boardSize) {
         final int numTotalRounds = 1000;
         int numRoundsWonByMinScore = 0;
+        int winScore = 30 * (boardSize * boardSize);
         MinePlayerStrategy randomStrategy = new RandomStrategy();
+        long randomSeed = System.currentTimeMillis();
+        GameEngine engine = new GameEngine(boardSize, yourStrategy, randomStrategy, randomSeed);
 
-        /*
-         * TODO: Fill in the code here to play 1000 games and calculate your strategy's win percent
-         * Note that you should only count a win if your strategy scores enough points to win
-         *  by the minimum score. Do not count wins as scoring more than RandomStrategy() (which always scores 0)
-         */
-
-        throw new RuntimeException("Testing win percent not yet implemented"); // TODO: Delete this line
-        //return ((double) numRoundsWonByMinScore) / numTotalRounds; // TODO: Uncomment this line
+        for (int round = 0; round < numTotalRounds; round++) {
+            engine.runGame();
+            if (engine.getRedPlayerScore() >= winScore) {
+                numRoundsWonByMinScore++;
+            }
+        }
+        return ((double) numRoundsWonByMinScore) / numTotalRounds;
     }
 }

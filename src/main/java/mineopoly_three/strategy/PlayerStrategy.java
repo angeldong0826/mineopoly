@@ -26,6 +26,7 @@ public class PlayerStrategy implements MinePlayerStrategy {
     private int currentInventorySize = 0;
     private int currentScore = 0;
     private int mineCount = 0;
+    private int numTurns = 0;
 
     public static int getBoardSize() {
         return boardSize;
@@ -66,11 +67,16 @@ public class PlayerStrategy implements MinePlayerStrategy {
     @Override
     public TurnAction getTurnAction(PlayerBoardView boardView, Economy economy, int currentCharge,
             boolean isRedTurn) {
+        numTurns += 1;
+        System.out.println(numTurns);
         this.currentBoard = boardView;
         Tool tool = new Tool();
         currentLocation = currentBoard.getYourLocation();
         TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, currentBoard));
 
+        if (currentCharge < maxCharge && boardView.getTileTypeAtLocation(currentLocation).equals(TileType.RECHARGE)) {
+            return null;
+        }
         // if robot needs charging
         if (currentCharge <= maxCharge * 0.25 && currentCharge <= maxCharge) {
             destination = tool.setDestination(TileType.RECHARGE, currentBoard);

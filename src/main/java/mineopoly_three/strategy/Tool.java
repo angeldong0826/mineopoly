@@ -10,13 +10,14 @@ import mineopoly_three.tiles.TileType;
 import mineopoly_three.util.DistanceUtil;
 
 /**
- * Helper class for determining the most expensive resource in the economy.
+ * Helper class that contains functions PlayerStrategy calls on to run game.
  */
 public class Tool {
-    PlayerStrategy playerStrategy = new PlayerStrategy(); // an instance of player strategy
+    PlayerStrategy playerStrategy = new PlayerStrategy(); // an instance of PlayerStrategy
 
     /**
      * Helper method to determine the most expensive resource in economy during game.
+     *
      * @param board current game board setup
      * @return most expensive resource as a ItemType
      * @throws IllegalArgumentException when board loaded is null
@@ -36,31 +37,9 @@ public class Tool {
         return mostExpensiveTile;
     }
 
-//    /**
-//     * Helper method to convert a tile to an item.
-//     * @param tileType to be converted to item
-//     * @return item converted from tile
-//     * @throws NullPointerException if tile type input is null
-//     */
-//    public ItemType tileToItem(TileType tileType) {
-//        if (tileType == null) {
-//            throw new NullPointerException("Null TileType");
-//        }
-//        ItemType itemToReturn = null;
-//        if (tileType.equals(TileType.RESOURCE_DIAMOND)) {
-//            itemToReturn = ItemType.DIAMOND;
-//        }
-//        if (tileType.equals(TileType.RESOURCE_EMERALD)) {
-//            itemToReturn = ItemType.EMERALD;
-//        }
-//        if (tileType.equals(TileType.RESOURCE_RUBY)) {
-//            itemToReturn = ItemType.RUBY;
-//        }
-//        return itemToReturn;
-//    }
-
     /**
      * Helper method to convert an item to a tile.
+     *
      * @param itemType to be converted to tile
      * @return tile converted from item
      * @throws NullPointerException if item input is null
@@ -84,6 +63,7 @@ public class Tool {
 
     /**
      * Helper method that calculates the closest tile to go to.
+     *
      * @param tile type wanted to reach
      * @return location to go where the tile is at
      * @throws NullPointerException if tile is null
@@ -109,6 +89,7 @@ public class Tool {
 
     /**
      * Helper method to determine the number of mine times needed.
+     *
      * @return number of times to mine as an int
      * @throws NullPointerException if tile input is null
      */
@@ -128,6 +109,7 @@ public class Tool {
 
     /**
      * Helper method to move robot to destination desired from current location.
+     *
      * @param currentLocation current location of player
      * @param destination destination wanting to reach
      * @return actions performed by robot
@@ -150,12 +132,17 @@ public class Tool {
     }
 
     /**
-     * Helper method to set destination as points
+     * Helper method to set destination as points for robot to go to.
+     *
      * @param tile to get to
      * @param currentBoard current game board
      * @return destination as point
+     * @throws NullPointerException if tile or currentBoard is null
      */
     public Point setDestination(TileType tile, PlayerBoardView currentBoard) {
+        if (tile == null || currentBoard == null) {
+            throw new NullPointerException();
+        }
         Point destination = playerStrategy.getDestination();
         for (int row = 0; row < PlayerStrategy.getBoardSize(); row++) {
             for (int col = 0; col < PlayerStrategy.getBoardSize(); col++) {

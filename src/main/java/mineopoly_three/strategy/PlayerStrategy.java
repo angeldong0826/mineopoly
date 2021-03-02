@@ -20,8 +20,8 @@ public class PlayerStrategy implements MinePlayerStrategy {
     private Point startTileLocation; // Point representing your starting location in (x, y) coordinates
     private Economy economy; // GameEngine's economy object which holds current prices for resources
     private PlayerBoardView currentBoard; // current game board
-    private Point currentLocation; // current location of player on board
-    private Point destination; // destination player tries to reach
+    private Point currentLocation = new Point(); // current location of player on board
+    private Point destination = new Point(); // destination player tries to reach
     private int currentInventorySize = 0; // current size of inventory
     private int currentScore = 0; // current score of game
     private int mineCount = 0; // number of times mined
@@ -33,6 +33,14 @@ public class PlayerStrategy implements MinePlayerStrategy {
 
     public Point getDestination() {
         return destination;
+    }
+
+    public Economy getEconomy() {
+        return economy;
+    }
+
+    public Point getCurrentLocation() {
+        return currentLocation;
     }
 
     /**
@@ -59,7 +67,7 @@ public class PlayerStrategy implements MinePlayerStrategy {
         this.startTileLocation = startTileLocation;
 
         Tool tool = new Tool(); // new instance of tool
-        // first destination. Diamond for it will always be the most expensive at the beginning of round
+        // first destination is diamond for it will always be the most expensive at the beginning of round
         destination = tool.nearestTile(TileType.RESOURCE_DIAMOND, startingBoard, startTileLocation);
     }
 

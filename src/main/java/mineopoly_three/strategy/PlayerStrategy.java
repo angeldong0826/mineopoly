@@ -43,6 +43,10 @@ public class PlayerStrategy implements MinePlayerStrategy {
         return currentLocation;
     }
 
+    public Economy getEconomy() {
+        return economy;
+    }
+
     @Override
     public void initialize(int boardSize, int maxInventorySize, int maxCharge, int winningScore,
         PlayerBoardView startingBoard, Point startTileLocation, boolean isRedPlayer,
@@ -55,8 +59,6 @@ public class PlayerStrategy implements MinePlayerStrategy {
         this.isRedPlayer = isRedPlayer;
 
         Tool tool = new Tool();
-        currentLocation = startingBoard.getYourLocation();
-        // TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, startingBoard));
         destination = tool.nearestTile(TileType.RESOURCE_DIAMOND, startingBoard, startTileLocation);
 
     }
@@ -66,35 +68,32 @@ public class PlayerStrategy implements MinePlayerStrategy {
             boolean isRedTurn) {
         this.currentBoard = boardView;
         Tool tool = new Tool();
-        currentLocation = boardView.getYourLocation();
-        TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, boardView));
+        currentLocation = currentBoard.getYourLocation();
+        TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, currentBoard));
 
-        if (currentScore <= winningScore) {
-            // if robot needs charging
-            if (currentCharge <= maxCharge * 0.28) {
-                destination = tool.setDestination(TileType.RECHARGE, currentBoard);
-                return tool.moveToDestination(currentLocation, destination);
-            } else {
-                if (currentInventorySize < maxInventorySize) {
-                    // continues to pick up most expensive resource
-
-                    if (currentLocation.x != destination.x || currentLocation.y != destination.y) {
-                        return tool.moveToDestination(currentLocation, destination);
-                    }
-                    while (mineCount < tool.minesRequired(mostExpensiveTile)) {
-                        mineCount++;
-                        return TurnAction.MINE;
-                    }
-                    destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
-                    mineCount = 0;
-                    return TurnAction.PICK_UP_RESOURCE;
-                } else if (currentInventorySize == maxInventorySize) {
-                    destination = tool.setDestination(TileType.RED_MARKET, currentBoard);
-                    if (currentLocation.x != destination.x || currentLocation.y != destination.y) {
-                        return tool.moveToDestination(currentLocation, destination);
-                    }
-                    destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
+        // if robot needs charging
+        if (currentCharge <= maxCharge * 0.25 && currentCharge <= maxCharge) {
+            destination = tool.setDestination(TileType.RECHARGE, currentBoard);
+            return tool.moveToDestination(currentLocation, destination);
+        } else {
+            if (currentInventorySize < maxInventorySize) {
+                if (currentLocation.x != destination.x || currentLocation.y != destination.y) {
+                    return tool.moveToDestination(currentLocation, destination);
                 }
+                if (mineCount < tool.minesRequired(mostExpensiveTile)) {
+                    mineCount++;
+                    return TurnAction.MINE;
+                }
+                destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
+                mineCount = 0;
+                return TurnAction.PICK_UP_RESOURCE;
+            } else if (currentInventorySize == maxInventorySize) {
+                destination = tool.setDestination(TileType.RED_MARKET, currentBoard);
+                if (currentLocation.x != destination.x || currentLocation.y != destination.y) {
+                    return tool.moveToDestination(currentLocation, destination);
+                }
+                destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
+                return tool.moveToDestination(currentLocation, destination);
             }
         }
         return null;
@@ -107,8 +106,8 @@ public class PlayerStrategy implements MinePlayerStrategy {
 
     @Override
     public void onSoldInventory(int totalSellPrice) {
-        currentInventorySize = 0;
         currentScore += totalSellPrice;
+        currentInventorySize = 0;
     }
 
     @Override

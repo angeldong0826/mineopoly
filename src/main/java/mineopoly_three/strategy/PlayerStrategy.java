@@ -16,16 +16,12 @@ public class PlayerStrategy implements MinePlayerStrategy {
     private static int boardSize; // length and width of the square game board
     private int maxInventorySize; // maximum number of items that your player can carry at one time
     private int maxCharge; // amount of charge your robot starts with (number of tile moves before needing to recharge)
-    private PlayerBoardView startingBoard; // view of the GameBoard at the start of the game
-    private Point startTileLocation; // Point representing your starting location in (x, y) coordinates
     private Economy economy; // GameEngine's economy object which holds current prices for resources
-    private PlayerBoardView currentBoard; // current game board
     private Point currentLocation = new Point(); // current location of player on board
     private Point destination = new Point(); // destination player tries to reach
     private int currentInventorySize = 0; // current size of inventory
     private int currentScore = 0; // current score of game
     private int mineCount = 0; // number of times mined
-//    private int numTurns = 0; // number of turns that takes to win
 
     public static int getBoardSize() {
         return boardSize;
@@ -41,6 +37,10 @@ public class PlayerStrategy implements MinePlayerStrategy {
 
     public Point getCurrentLocation() {
         return currentLocation;
+    }
+
+    public int getCurrentInventorySize() {
+        return currentInventorySize;
     }
 
     /**
@@ -63,8 +63,6 @@ public class PlayerStrategy implements MinePlayerStrategy {
         this.boardSize = boardSize;
         this.maxInventorySize = maxInventorySize;
         this.maxCharge = maxCharge;
-        this.startingBoard = startingBoard;
-        this.startTileLocation = startTileLocation;
 
         Tool tool = new Tool(); // new instance of tool
         // first destination is diamond for it will always be the most expensive at the beginning of round
@@ -87,20 +85,18 @@ public class PlayerStrategy implements MinePlayerStrategy {
     @Override
     public TurnAction getTurnAction(PlayerBoardView boardView, Economy economy, int currentCharge,
             boolean isRedTurn) {
-//        numTurns += 1;
-//        System.out.println(numTurns);
-        this.currentBoard = boardView;
-        Tool tool = new Tool();
-        currentLocation = currentBoard.getYourLocation(); // sets current location to player location on board
-        TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, currentBoard)); // updated most expensive tile type
+        // current game board
+        Tool tool = new Tool(); // an instance of my Tool helper class
+        currentLocation = boardView.getYourLocation(); // sets current location to player location on board
+        TileType mostExpensiveTile = tool.itemToTile(tool.mostExpensiveResource(economy, boardView)); // updated most expensive tile type
 
-        // can't leave charging station until fully charged
+        // robot shouldn't leave charging station until fully charged
         if (currentCharge < maxCharge && boardView.getTileTypeAtLocation(currentLocation).equals(TileType.RECHARGE)) {
             return null;
         }
         // if robot needs to recharge
         if (currentCharge <= maxCharge * 0.25 && currentCharge <= maxCharge) {
-            destination = tool.setDestination(TileType.RECHARGE, currentBoard);
+            destination = tool.nearestTile(TileType.RECHARGE, boardView, currentLocation);
             return tool.moveToDestination(currentLocation, destination);
         } else {
             if (currentInventorySize < maxInventorySize) { // mines most expensive resource until full inventory
@@ -111,16 +107,16 @@ public class PlayerStrategy implements MinePlayerStrategy {
                     mineCount++;
                     return TurnAction.MINE;
                 }
-                destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
+                destination = tool.nearestTile(mostExpensiveTile, boardView, currentLocation);
                 mineCount = 0;
                 return TurnAction.PICK_UP_RESOURCE;
             } else if (currentInventorySize == maxInventorySize) { // goes to market when inventory is full
-                destination = tool.setDestination(TileType.RED_MARKET, currentBoard);
+                destination = tool.nearestTile(TileType.RED_MARKET, boardView, currentLocation);
 
                 if (currentLocation.x != destination.x || currentLocation.y != destination.y) {
                     return tool.moveToDestination(currentLocation, destination);
                 }
-                destination = tool.nearestTile(mostExpensiveTile, currentBoard, currentLocation);
+                destination = tool.nearestTile(mostExpensiveTile, boardView, currentLocation);
                 return tool.moveToDestination(currentLocation, destination);
             }
         }
@@ -157,7 +153,7 @@ public class PlayerStrategy implements MinePlayerStrategy {
      */
     @Override
     public String getName() {
-        return "iTriedStrategy";
+        return "I Tried";
     }
 
     /**

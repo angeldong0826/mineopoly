@@ -21,11 +21,10 @@ public class Tool {
      *
      * @param board current game board setup
      * @return most expensive resource as a ItemType
-     * @throws IllegalArgumentException when board loaded is null
      */
     public ItemType mostExpensiveResource(Economy economy, PlayerBoardView board) {
-        if (board == null) {
-            throw new NullPointerException("Null board");
+        if (economy == null || board == null) {
+            return null;
         }
         ItemType mostExpensiveTile = null;
         int maxValue = 0;
@@ -43,11 +42,10 @@ public class Tool {
      *
      * @param itemType to be converted to tile
      * @return tile converted from item
-     * @throws NullPointerException if item input is null
      */
     public TileType itemToTile(ItemType itemType) {
         if (itemType == null) {
-            throw new NullPointerException("Null ItemType");
+            return null;
         }
         TileType tileToReturn = TileType.EMPTY;
         if (itemType.equals(ItemType.RUBY)) {
@@ -67,13 +65,12 @@ public class Tool {
      *
      * @param tile type wanted to reach
      * @return location to go where the tile is at
-     * @throws NullPointerException if tile is null
      */
     public Point nearestTile(TileType tile, PlayerBoardView currentBoard, Point currentLocation) {
-        Point destination = new Point(Integer.MAX_VALUE/2, Integer.MAX_VALUE/2); // destination that bot goes toward
+        Point destination = new Point(Integer.MAX_VALUE/3, Integer.MAX_VALUE/3); // destination that bot goes toward
 
         if (tile == null) {
-            throw new NullPointerException("Null tile");
+            return null;
         }
         for (int row = 0; row < PlayerStrategy.getBoardSize(); row++) {
             for (int col = 0; col < PlayerStrategy.getBoardSize(); col++) {
@@ -92,12 +89,8 @@ public class Tool {
      * Helper method to determine the number of mine times needed.
      *
      * @return number of times to mine as an int
-     * @throws NullPointerException if tile input is null
      */
     public int minesRequired(TileType tile) {
-        if (tile == null) {
-            throw new NullPointerException("Null tile");
-        }
         if (tile.equals(TileType.RESOURCE_RUBY)) {
             return 1;
         } else if (tile.equals(TileType.RESOURCE_EMERALD)) {
@@ -114,11 +107,10 @@ public class Tool {
      * @param currentLocation current location of player
      * @param destination destination wanting to reach
      * @return actions performed by robot
-     * @throws NullPointerException if current location or destination is null
      */
     public TurnAction moveToDestination(Point currentLocation, Point destination) {
         if (currentLocation == null || destination == null) {
-            throw new NullPointerException();
+            return null;
         }
         if (currentLocation.x < destination.x) {
             return TurnAction.MOVE_RIGHT;
@@ -138,11 +130,10 @@ public class Tool {
      * @param tile to get to
      * @param currentBoard current game board
      * @return destination as point
-     * @throws NullPointerException if tile or currentBoard is null
      */
     public Point setDestination(TileType tile, PlayerBoardView currentBoard) {
         if (tile == null || currentBoard == null) {
-            throw new NullPointerException();
+            return null;
         }
         Point destination = playerStrategy.getDestination();
         for (int row = 0; row < PlayerStrategy.getBoardSize(); row++) {

@@ -1,12 +1,9 @@
 package mineopoly_three.strategy;
 
-import com.sun.istack.internal.NotNull;
 import java.awt.Point;
-import javax.print.attribute.standard.Destination;
 import mineopoly_three.action.TurnAction;
 import mineopoly_three.game.Economy;
 import mineopoly_three.item.ItemType;
-import mineopoly_three.tiles.Tile;
 import mineopoly_three.tiles.TileType;
 import mineopoly_three.util.DistanceUtil;
 
@@ -72,8 +69,8 @@ public class Tool {
         if (tile == null) {
             return null;
         }
-        for (int row = 0; row < PlayerStrategy.getBoardSize(); row++) {
-            for (int col = 0; col < PlayerStrategy.getBoardSize(); col++) {
+        for (int row = 0; row < PlayerStrategy.getCurrentBoardSize(); row++) {
+            for (int col = 0; col < PlayerStrategy.getCurrentBoardSize(); col++) {
                 if (currentBoard.getTileTypeAtLocation(row, col).equals(tile)) {
                     Point temp = new Point(row, col);
                     if (DistanceUtil.getManhattanDistance(temp, currentLocation) < DistanceUtil.getManhattanDistance(destination, currentLocation)) {
@@ -136,8 +133,8 @@ public class Tool {
             return null;
         }
         Point destination = playerStrategy.getDestination();
-        for (int row = 0; row < PlayerStrategy.getBoardSize(); row++) {
-            for (int col = 0; col < PlayerStrategy.getBoardSize(); col++) {
+        for (int row = 0; row < PlayerStrategy.getCurrentBoardSize(); row++) {
+            for (int col = 0; col < PlayerStrategy.getCurrentBoardSize(); col++) {
                 if (currentBoard.getTileTypeAtLocation(row, col).equals(tile)) {
                     destination = new Point (row, col);
                 }

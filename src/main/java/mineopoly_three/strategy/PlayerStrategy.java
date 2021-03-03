@@ -1,6 +1,5 @@
 package mineopoly_three.strategy;
 
-import com.sun.istack.internal.NotNull;
 import java.awt.Point;
 import java.util.Random;
 import mineopoly_three.action.TurnAction;
@@ -13,7 +12,7 @@ import mineopoly_three.tiles.TileType;
  *  winning the Mine-opoly game.
  */
 public class PlayerStrategy implements MinePlayerStrategy {
-    private static int boardSize; // length and width of the square game board
+    private static int currentBoardSize; // length and width of the square game board
     private int maxInventorySize; // maximum number of items that your player can carry at one time
     private int maxCharge; // amount of charge your robot starts with (number of tile moves before needing to recharge)
     private Economy economy; // GameEngine's economy object which holds current prices for resources
@@ -23,8 +22,8 @@ public class PlayerStrategy implements MinePlayerStrategy {
     private int currentScore = 0; // current score of game
     private int mineCount = 0; // number of times mined
 
-    public static int getBoardSize() {
-        return boardSize;
+    public static int getCurrentBoardSize() {
+        return currentBoardSize;
     }
 
     public Point getDestination() {
@@ -60,7 +59,7 @@ public class PlayerStrategy implements MinePlayerStrategy {
     @Override
     public void initialize(int boardSize, int maxInventorySize, int maxCharge, int winningScore,
             PlayerBoardView startingBoard, Point startTileLocation, boolean isRedPlayer, Random random) {
-        this.boardSize = boardSize;
+        currentBoardSize = boardSize;
         this.maxInventorySize = maxInventorySize;
         this.maxCharge = maxCharge;
 

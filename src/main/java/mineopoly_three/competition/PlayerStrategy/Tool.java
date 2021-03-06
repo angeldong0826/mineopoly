@@ -1,4 +1,4 @@
-package mineopoly_three.competition;
+package mineopoly_three.competition.PlayerStrategy;
 
 import java.awt.Point;
 import mineopoly_three.action.TurnAction;

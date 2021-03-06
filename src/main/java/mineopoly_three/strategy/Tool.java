@@ -10,7 +10,7 @@ import mineopoly_three.util.DistanceUtil;
 /**
  * Helper class that contains functions PlayerStrategy calls on to run game.
  */
-public class Tool {
+public class Tool { // make static
     PlayerStrategy playerStrategy = new PlayerStrategy(); // an instance of PlayerStrategy
 
     /**
@@ -44,13 +44,16 @@ public class Tool {
         if (itemType == null) {
             return null;
         }
+
         TileType tileToReturn = TileType.EMPTY;
         if (itemType.equals(ItemType.RUBY)) {
             tileToReturn = TileType.RESOURCE_RUBY;
         }
+
         if (itemType.equals(ItemType.EMERALD)) {
             tileToReturn = TileType.RESOURCE_EMERALD;
         }
+
         if (itemType.equals(ItemType.DIAMOND)) {
             tileToReturn = TileType.RESOURCE_DIAMOND;
         }

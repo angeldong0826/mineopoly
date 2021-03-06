@@ -1,11 +1,10 @@
-package mineopoly_three.competition.PlayerStrategy;
+package mineopoly_three.competition;
 
 import java.awt.Point;
 import mineopoly_three.action.TurnAction;
 import mineopoly_three.game.Economy;
 import mineopoly_three.item.ItemType;
 import mineopoly_three.strategy.PlayerBoardView;
-import mineopoly_three.strategy.PlayerStrategy;
 import mineopoly_three.tiles.TileType;
 import mineopoly_three.util.DistanceUtil;
 
@@ -13,7 +12,7 @@ import mineopoly_three.util.DistanceUtil;
  * Helper class that contains functions PlayerStrategy calls on to run game.
  */
 public class Tool {
-    mineopoly_three.strategy.PlayerStrategy playerStrategy = new mineopoly_three.strategy.PlayerStrategy(); // an instance of PlayerStrategy
+    mineopoly_three.competition.PlayerStrategy playerStrategy = new mineopoly_three.competition.PlayerStrategy(); // an instance of PlayerStrategy
 
     /**
      * Helper method to determine the most expensive resource in economy during game.
@@ -71,8 +70,8 @@ public class Tool {
         if (tile == null) {
             return null;
         }
-        for (int row = 0; row < mineopoly_three.strategy.PlayerStrategy.getCurrentBoardSize(); row++) {
-            for (int col = 0; col < mineopoly_three.strategy.PlayerStrategy.getCurrentBoardSize(); col++) {
+        for (int row = 0; row < mineopoly_three.competition.PlayerStrategy.getCurrentBoardSize(); row++) {
+            for (int col = 0; col < mineopoly_three.competition.PlayerStrategy.getCurrentBoardSize(); col++) {
                 if (currentBoard.getTileTypeAtLocation(row, col).equals(tile)) {
                     Point temp = new Point(row, col);
                     if (DistanceUtil.getManhattanDistance(temp, currentLocation) < DistanceUtil.getManhattanDistance(destination, currentLocation)) {
@@ -135,7 +134,7 @@ public class Tool {
             return null;
         }
         Point destination = playerStrategy.getDestination();
-        for (int row = 0; row < mineopoly_three.strategy.PlayerStrategy.getCurrentBoardSize(); row++) {
+        for (int row = 0; row < mineopoly_three.competition.PlayerStrategy.getCurrentBoardSize(); row++) {
             for (int col = 0; col < PlayerStrategy.getCurrentBoardSize(); col++) {
                 if (currentBoard.getTileTypeAtLocation(row, col).equals(tile)) {
                     destination = new Point (row, col);

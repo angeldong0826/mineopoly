@@ -1,4 +1,4 @@
-package mineopoly_three.competition.PlayerStrategy;
+package mineopoly_three.competition;
 
 import java.awt.Point;
 import java.util.Random;

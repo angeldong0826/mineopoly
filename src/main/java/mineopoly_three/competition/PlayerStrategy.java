@@ -20,7 +20,7 @@ public class PlayerStrategy implements MinePlayerStrategy {
     private Economy economy; // GameEngine's economy object which holds current prices for resources
     private Point currentLocation = new Point(); // current location of player on board
     private Point destination = new Point(); // destination player tries to reach
-    private int currentInventorySize = 0; // current size of inventory
+    private int currentInventorySize; // current size of inventory
     private int currentScore = 0; // current score of game
     private int mineCount = 0; // number of times mined
 
@@ -66,6 +66,9 @@ public class PlayerStrategy implements MinePlayerStrategy {
         currentBoardSize = boardSize;
         this.maxInventorySize = maxInventorySize;
         this.maxCharge = maxCharge;
+        currentInventorySize = 0;
+        currentLocation = startTileLocation;
+        destination = new Point();
 
         Tool tool = new Tool(); // new instance of tool
         // first destination is diamond for it will always be the most expensive at the beginning of round
